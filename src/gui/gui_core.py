@@ -1,9 +1,9 @@
-# SKUer Qt App
+# SKUer Core Functionality
 
 # Imports
 from PySide6.QtWidgets import QApplication
 
-from .skuer_window import SKUMainWindow
+from .app.main_window import SKUMainWindow
 
 # Classes
 class SKUApplication(QApplication):

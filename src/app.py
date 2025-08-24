@@ -2,7 +2,7 @@
 # MIT (c) 2025 Caleb North
 
 from sys import exit
-from gui.skuer_app import SKUApplication
+from gui.gui_core import SKUApplication
 
 sku_app = SKUApplication()
 
