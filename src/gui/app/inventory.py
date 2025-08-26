@@ -87,7 +87,7 @@ class PartsListWidgetPartItem(QListWidgetItem):
         self.part_widget_layout.addWidget(self.part_widget_used)
         self.part_widget_layout.addWidget(self.part_widget_in_stock)
 
-        self.setSizeHint(0, self.part_widget.sizeHint())
+        self.setSizeHint(self.part_widget.sizeHint())
 
 
 class ProductTreeWidget(QTreeWidget):
@@ -136,8 +136,9 @@ class PartsListWidget(QListWidget):
         Add a PartsListWidgetPartItem to the parts list and assign its widget to itself
         """
 
-        super().addTopLevelItem(parts_item)
-        self.setItemWidget(parts_item, 0, parts_item.stock_widget)
+        super().addItem(parts_item)
+        self.setItemWidget(parts_item, parts_item.part_widget)
+
 
 class InventoryWidget(QGroupBox):
     """
@@ -148,8 +149,8 @@ class InventoryWidget(QGroupBox):
         super().__init__(*arg)
 
         # List widgets
-        self.product_tree_widget    = QTreeWidget()
-        self.parts_list_widget      = QListWidget()
+        self.product_tree_widget    = ProductTreeWidget()
+        self.parts_list_widget      = PartsListWidget()
 
         self.product_tree_widget.setHeaderHidden(True)
 
@@ -170,3 +171,5 @@ class InventoryWidget(QGroupBox):
         self.inventory_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
         self.inventory_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
         self.inventory_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
+
+        self.parts_list_widget.addPartsItem(PartsListWidgetPartItem())
