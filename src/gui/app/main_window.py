@@ -38,7 +38,7 @@ class SKUMainWidget(QWidget):
         # Create all the major widget groups, set, and arrange them together 
         self.current_estimate_card:CurrentEstimateCardWidget        = CurrentEstimateCardWidget("Estimates")
         self.running_expenses:RunningExpensesWidget                 = RunningExpensesWidget("Running Expenses")
-        self.current_inventory:InventoryTreeWidget                  = InventoryTreeWidget("Current Inventory")
+        self.current_inventory:InventoryWidget                  = InventoryWidget("Current Inventory")
         self.current_estimate_toolbar:CurrentEstimateToolbarWidget  = CurrentEstimateToolbarWidget()
 
         layout:QGridLayout = QGridLayout()
@@ -49,15 +49,10 @@ class SKUMainWidget(QWidget):
         layout.addWidget(self.running_expenses, 0, 1, 1, 1)
         layout.addWidget(self.current_inventory, 1, 1, 1, 1)
 
+        # This ensures that the bottom row stays its size and will not stretch
         layout.setRowStretch(0, 1)
         layout.setRowStretch(1, 1)
         layout.setRowStretch(2, 0)
 
         # TEMP TODO
-        for i in range(0, 10):
-            s = ProductListWidgetStockItem()
-            self.current_inventory.add_StockItem(s)
-
-            for i in range(0, 5):
-                t = ProductListWidgetTransactionItem()
-                self.current_inventory.add_TransactionItem(t, s)
+        

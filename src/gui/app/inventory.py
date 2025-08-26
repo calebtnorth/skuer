@@ -4,17 +4,15 @@ from typing import Self
 
 from PySide6.QtWidgets import (
     QGroupBox,
-    QGridLayout, QHBoxLayout,
+    QGridLayout, QHBoxLayout, QVBoxLayout,
     QLabel, QListWidget, QListWidgetItem, QPushButton, QTreeWidget, QTreeWidgetItem, QWidget
 )
 
 
-class ProductListWidgetTransactionItem(QTreeWidgetItem):
+class ProductTreeWidgetTransactionItem(QTreeWidgetItem):
     """
-    The _widget_ that is added to a child-level QTreeWidgetItem
-    and contains the individual transactions modifying the stock
+    The child-level QTreeWidgetItem containing the individual transactions modifying the stock
     """
-
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
@@ -39,12 +37,10 @@ class ProductListWidgetTransactionItem(QTreeWidgetItem):
         self.setSizeHint(0, self.transaction_widget.sizeHint())
 
 
-class ProductListWidgetStockItem(QTreeWidgetItem):
+class ProductTreeWidgetStockItem(QTreeWidgetItem):
     """
-    The _widget_ that is added to a top-level QTreeWidgetItem
-    and contains the primary details of the product
+    The top-level QTreeWidgetItem containing the primary details of the product
     """
-
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
@@ -66,45 +62,96 @@ class ProductListWidgetStockItem(QTreeWidgetItem):
         self.setSizeHint(0, self.stock_widget.sizeHint())
 
 
-class InventoryTreeWidget(QGroupBox):
+class PartsListWidgetPartItem(QListWidgetItem):
     """
-    Displays the current inventory, regardless of estimate card
+    The QListWidgetItem constaining a single part used in the product
     """
 
- 
-    # Inventory Management Functions #
+    def __init__(self: Self, *arg) -> None:
+        super().__init__(*arg)
 
-    def add_StockItem(self: Self, product_item: ProductListWidgetStockItem) -> None:
+        self.part_widget            = QWidget()
+        self.part_widget_layout     = QHBoxLayout(self.part_widget)
+
+        self.part_widget_name       = QLabel("Name")
+        self.part_widget_sku        = QLabel("SKU")
+        self.part_widget_used       = QLabel("0")
+        self.part_widget_in_stock   = QLabel("0")
+
+        vertical_layout = QVBoxLayout()
+        vertical_layout.addWidget(self.part_widget_name)
+        vertical_layout.addWidget(self.part_widget_sku)
+
+        self.part_widget_layout.addLayout(vertical_layout)
+        self.part_widget_layout.addStretch(1)
+        self.part_widget_layout.addWidget(self.part_widget_used)
+        self.part_widget_layout.addWidget(self.part_widget_in_stock)
+
+        self.setSizeHint(0, self.part_widget.sizeHint())
+
+
+class ProductTreeWidget(QTreeWidget):
+    """
+    
+    """
+
+    def __init__(self: Self, *arg) -> None:
+        super().__init__(*arg)
+
+    
+    def addStockItem(self: Self, stock_item: ProductTreeWidgetStockItem) -> None:
         """
-        Add this ProductListWidgetStockItem to the given product list and assign its widget to itself
+        Add a ProductTreeWidgetStockItem to the product list and assign its widget to itself
         """
 
-        self.product_list_widget.addTopLevelItem(product_item)
-        self.product_list_widget.setItemWidget(product_item, 0, product_item.stock_widget)
+        super().addTopLevelItem(stock_item)
+        self.setItemWidget(stock_item, 0, stock_item.stock_widget)
 
-
-    def add_TransactionItem(self: Self, transaction_item: ProductListWidgetTransactionItem, product_item: ProductListWidgetStockItem) -> None:
+    
+    def addTransactionItem(self: Self, transaction_item: ProductTreeWidgetTransactionItem, stock_item: ProductTreeWidgetStockItem) -> None:
         """
-        Add a ProductListWidgetTransactionItem to this ProductListWidgetStockItem and assign its widget to itself,
-        if this ProductListWidgetStockItem has a parent. Otherwise it will fail and log an error, which should never happen.
+        Add a ProductTreeWidgetTransactionItem to this ProductTreeWidgetStockItem and assign its widget to itself,
+        if this ProductTreeWidgetStockItem has a parent. Otherwise it will fail and log an error, which should never happen.
         """
 
-        if not product_item.treeWidget():
-            print("[!] No ProductListWidgetStockItem treeWidget when adding ProductListWidgetTransactionItem")
+        if not stock_item.treeWidget():
+            print("[!] No ProductTreeWidgetStockItem treeWidget when adding ProductTreeWidgetTransactionItem")
             return
 
-        product_item.addChild(transaction_item)
-        self.product_list_widget.setItemWidget(transaction_item, 0, transaction_item.transaction_widget)
+        stock_item.addChild(transaction_item)
+        self.setItemWidget(transaction_item, 0, transaction_item.transaction_widget)
 
+
+class PartsListWidget(QListWidget):
+    """
+    
+    """
+
+    def __init__(self: Self, *arg) -> None:
+        super().__init__(*arg)
+
+    
+    def addPartsItem(self: Self, parts_item: PartsListWidgetPartItem) -> None:
+        """
+        Add a PartsListWidgetPartItem to the parts list and assign its widget to itself
+        """
+
+        super().addTopLevelItem(parts_item)
+        self.setItemWidget(parts_item, 0, parts_item.stock_widget)
+
+class InventoryWidget(QGroupBox):
+    """
+    Displays the current inventory, regardless of estimate card
+    """       
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
 
         # List widgets
-        self.product_list_widget    = QTreeWidget()
+        self.product_tree_widget    = QTreeWidget()
         self.parts_list_widget      = QListWidget()
 
-        self.product_list_widget.setHeaderHidden(True)
+        self.product_tree_widget.setHeaderHidden(True)
 
         # Buttons
         self.product_tree_push_button_layout    = QHBoxLayout()
@@ -120,6 +167,6 @@ class InventoryTreeWidget(QGroupBox):
 
         # Main layout
         self.inventory_widget_layout = QGridLayout(self)
-        self.inventory_widget_layout.addWidget(self.product_list_widget, 0, 0, 1, 1)
+        self.inventory_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
         self.inventory_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
         self.inventory_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
