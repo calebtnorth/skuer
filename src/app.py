@@ -6,6 +6,5 @@ from gui.gui_core import SKUApplication
 
 sku_app = SKUApplication()
 
-print(__name__)
 if __name__ == "__main__":
     exit(sku_app.exec())
