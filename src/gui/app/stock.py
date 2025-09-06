@@ -13,34 +13,34 @@ from ..widgets import (
     SKUerTreeWidget, SKUerTreeWidgetItem
 )
 
-class ProductTreeWidgetTransactionItem(SKUerTreeWidgetItem):
+class OrdersTreeWidgetOrderItem(SKUerTreeWidgetItem):
     """
     The child-level QTreeWidgetItem containing the individual transactions modifying the stock
     """
 
     def widget(self: Self) -> QWidget:
-        return self.transaction_widget
+        return self.order_widget
 
     
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
 
-        self.transaction_widget         = QWidget()
-        self.transaction_widget_layout  = QHBoxLayout(self.transaction_widget)
+        self.order_widget         = QWidget()
+        self.order_widget_layout  = QHBoxLayout(self.order_widget)
 
-        self.transaction_widget_date_label      = QLabel("01/01/1970")
-        self.transaction_widget_type_label      = QLabel("Restock")
-        self.transaction_widget_sold_label      = QLabel("0")
+        self.order_widget_number_label            = QLabel("Order #NK00000000")
+        self.order_widget_date_label              = QLabel("01/01/1970")
+        self.order_widget_cost_label              = QLabel("0")
         self.transaction_widget_in_stock_label  = QLabel("0")
         self.transaction_widget_total_label     = QLabel("0")
 
-        self.transaction_widget_layout.addWidget(self.transaction_widget_date_label)
-        self.transaction_widget_layout.addStretch(1)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_type_label)
-        self.transaction_widget_layout.addStretch(1)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_sold_label)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_in_stock_label)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_total_label)
+        self.order_widget_layout.addWidget(self.transaction_widget_date_label)
+        self.order_widget_layout.addStretch(1)
+        self.order_widget_layout.addWidget(self.transaction_widget_type_label)
+        self.order_widget_layout.addStretch(1)
+        self.order_widget_layout.addWidget(self.transaction_widget_sold_label)
+        self.order_widget_layout.addWidget(self.transaction_widget_in_stock_label)
+        self.order_widget_layout.addWidget(self.transaction_widget_total_label)
 
         self.setSizeHint(0, self.transaction_widget.sizeHint())
 
@@ -105,7 +105,7 @@ class PartsListWidgetPartItem(SKUerListWidgetItem):
         self.setSizeHint(self.part_widget.sizeHint())
 
 
-class InventoryWidget(QWidget):
+class StockWidget(QWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
@@ -132,10 +132,10 @@ class InventoryWidget(QWidget):
         self.product_tree_push_button_layout.addWidget(self.product_tree_estimate_push_button)
 
         # Main layout
-        self.inventory_widget_layout = QGridLayout(self)
-        self.inventory_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
-        self.inventory_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
-        self.inventory_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
+        self.stock_widget_layout = QGridLayout(self)
+        self.stock_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
+        self.stock_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
+        self.stock_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
 
         p = PartsListWidgetPartItem()
         self.parts_list_widget.addItem(p)

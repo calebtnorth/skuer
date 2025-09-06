@@ -13,7 +13,7 @@ from ..widgets import (
     SKUerTreeWidget, SKUerTreeWidgetItem
 )
 
-class ProductTreeWidgetTransactionItem(SKUerTreeWidgetItem):
+class ggggg(SKUerTreeWidgetItem):
     """
     The child-level QTreeWidgetItem containing the individual transactions modifying the stock
     """
@@ -45,7 +45,7 @@ class ProductTreeWidgetTransactionItem(SKUerTreeWidgetItem):
         self.setSizeHint(0, self.transaction_widget.sizeHint())
 
 
-class ProductTreeWidgetStockItem(SKUerTreeWidgetItem):
+class ProductTrgggeeWidgetStockItem(SKUerTreeWidgetItem):
     """
     The top-level QTreeWidgetItem containing the primary details of the product
     """
@@ -74,7 +74,7 @@ class ProductTreeWidgetStockItem(SKUerTreeWidgetItem):
         self.setSizeHint(0, self.stock_widget.sizeHint())
 
 
-class PartsListWidgetPartItem(SKUerListWidgetItem):
+class PartsListWidgetPartgggggItem(SKUerListWidgetItem):
     """
     The QListWidgetItem constaining a single part used in the product
     """
@@ -105,7 +105,7 @@ class PartsListWidgetPartItem(SKUerListWidgetItem):
         self.setSizeHint(self.part_widget.sizeHint())
 
 
-class InventoryWidget(QWidget):
+class OrdersWidget(QWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
@@ -132,11 +132,7 @@ class InventoryWidget(QWidget):
         self.product_tree_push_button_layout.addWidget(self.product_tree_estimate_push_button)
 
         # Main layout
-        self.inventory_widget_layout = QGridLayout(self)
-        self.inventory_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
-        self.inventory_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
-        self.inventory_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
-
-        p = PartsListWidgetPartItem()
-        self.parts_list_widget.addItem(p)
-        p.part_widget_sku.setText("RSRY-059-MDL-WOOD")
+        self.stock_widget_layout = QGridLayout(self)
+        self.stock_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
+        self.stock_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
+        self.stock_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)

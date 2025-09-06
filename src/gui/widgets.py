@@ -5,7 +5,7 @@ from typing import Self
 
 from PySide6.QtWidgets import (
     QWidget,
-    QListWidget, QListWidgetItem, QTabWidget, QTreeWidget, QTreeWidgetItem
+    QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
 )
 
 
@@ -23,10 +23,6 @@ class SKUerListWidget(QListWidget):
     def addItem(self: Self, item: SKUerListWidgetItem) -> None:
         super().addItem(item)
         self.setItemWidget(item, item.widget())
-
-
-## TABS
-class SKUerTabWidget(QTabWidget): ...
 
 
 ## TREES

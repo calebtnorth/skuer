@@ -12,13 +12,13 @@ from PySide6.QtCore import (
 )
 
 
-class CurrentEstimateCardWidget(QGroupBox):
+class CurrentEstimateCardWidget(QWidget):
     """
     
     """
 
     def __init__(self: Self, *arg) -> None:
-        super().__init__("",*arg)
+        super().__init__(*arg)
 
         # Selection Widget
         self.estimate_dropdown_widget           = QComboBox()
