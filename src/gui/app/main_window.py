@@ -4,7 +4,7 @@ from typing import Self
 
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QGroupBox,
+    QMainWindow, QTabWidget, QWidget, QGroupBox,
     QHBoxLayout, QVBoxLayout, QGridLayout, QSizePolicy,
     QLabel
 )
@@ -38,8 +38,13 @@ class SKUMainWidget(QWidget):
         # Create all the major widget groups, set, and arrange them together 
         self.current_estimate_card:CurrentEstimateCardWidget        = CurrentEstimateCardWidget("Estimates")
         self.running_expenses:RunningExpensesWidget                 = RunningExpensesWidget("Running Expenses")
-        self.current_inventory:InventoryWidget                  = InventoryWidget("Current Inventory")
         self.current_estimate_toolbar:CurrentEstimateToolbarWidget  = CurrentEstimateToolbarWidget()
+
+        self.current_inventory:InventoryWidget                      = InventoryWidget()
+        self.currents:QTabWidget                                    = QTabWidget()
+        self.currents.addTab(self.current_inventory, "Current Inventory")
+        self.currents.addTab(QWidget(), "Current Stock")
+
 
         layout:QGridLayout = QGridLayout()
         self.setLayout(layout)
@@ -47,7 +52,7 @@ class SKUMainWidget(QWidget):
         layout.addWidget(self.current_estimate_card, 0, 0, 2, 1)
         layout.addWidget(self.current_estimate_toolbar, 2, 0, 1, 2)
         layout.addWidget(self.running_expenses, 0, 1, 1, 1)
-        layout.addWidget(self.current_inventory, 1, 1, 1, 1)
+        layout.addWidget(self.currents, 1, 1, 1, 1)
 
         # This ensures that the bottom row stays its size and will not stretch
         layout.setRowStretch(0, 1)

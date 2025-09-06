@@ -3,17 +3,25 @@
 from typing import Self
 
 from PySide6.QtWidgets import (
-    QGroupBox,
+    QGroupBox, QWidget,
     QGridLayout, QHBoxLayout, QVBoxLayout,
-    QLabel, QListWidget, QListWidgetItem, QPushButton, QTreeWidget, QTreeWidgetItem, QWidget
+    QLabel, QPushButton
 )
 
+from ..widgets import (
+    SKUerListWidget, SKUerListWidgetItem,
+    SKUerTreeWidget, SKUerTreeWidgetItem
+)
 
-class ProductTreeWidgetTransactionItem(QTreeWidgetItem):
+class ProductTreeWidgetTransactionItem(SKUerTreeWidgetItem):
     """
     The child-level QTreeWidgetItem containing the individual transactions modifying the stock
     """
 
+    def widget(self: Self) -> QWidget:
+        return self.transaction_widget
+
+    
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
 
@@ -37,10 +45,14 @@ class ProductTreeWidgetTransactionItem(QTreeWidgetItem):
         self.setSizeHint(0, self.transaction_widget.sizeHint())
 
 
-class ProductTreeWidgetStockItem(QTreeWidgetItem):
+class ProductTreeWidgetStockItem(SKUerTreeWidgetItem):
     """
     The top-level QTreeWidgetItem containing the primary details of the product
     """
+
+    def widget(self: Self) -> None:
+        return self.stock_widget
+
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
@@ -62,10 +74,13 @@ class ProductTreeWidgetStockItem(QTreeWidgetItem):
         self.setSizeHint(0, self.stock_widget.sizeHint())
 
 
-class PartsListWidgetPartItem(QListWidgetItem):
+class PartsListWidgetPartItem(SKUerListWidgetItem):
     """
     The QListWidgetItem constaining a single part used in the product
     """
+
+    def widget(self: Self) -> QWidget:
+        return self.part_widget
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
@@ -90,67 +105,17 @@ class PartsListWidgetPartItem(QListWidgetItem):
         self.setSizeHint(self.part_widget.sizeHint())
 
 
-class ProductTreeWidget(QTreeWidget):
-    """
-    
-    """
-
-    def __init__(self: Self, *arg) -> None:
-        super().__init__(*arg)
-
-    
-    def addStockItem(self: Self, stock_item: ProductTreeWidgetStockItem) -> None:
-        """
-        Add a ProductTreeWidgetStockItem to the product list and assign its widget to itself
-        """
-
-        super().addTopLevelItem(stock_item)
-        self.setItemWidget(stock_item, 0, stock_item.stock_widget)
-
-    
-    def addTransactionItem(self: Self, transaction_item: ProductTreeWidgetTransactionItem, stock_item: ProductTreeWidgetStockItem) -> None:
-        """
-        Add a ProductTreeWidgetTransactionItem to this ProductTreeWidgetStockItem and assign its widget to itself,
-        if this ProductTreeWidgetStockItem has a parent. Otherwise it will fail and log an error, which should never happen.
-        """
-
-        if not stock_item.treeWidget():
-            print("[!] No ProductTreeWidgetStockItem treeWidget when adding ProductTreeWidgetTransactionItem")
-            return
-
-        stock_item.addChild(transaction_item)
-        self.setItemWidget(transaction_item, 0, transaction_item.transaction_widget)
-
-
-class PartsListWidget(QListWidget):
-    """
-    
-    """
-
-    def __init__(self: Self, *arg) -> None:
-        super().__init__(*arg)
-
-    
-    def addPartsItem(self: Self, parts_item: PartsListWidgetPartItem) -> None:
-        """
-        Add a PartsListWidgetPartItem to the parts list and assign its widget to itself
-        """
-
-        super().addItem(parts_item)
-        self.setItemWidget(parts_item, parts_item.part_widget)
-
-
-class InventoryWidget(QGroupBox):
+class InventoryWidget(QWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
-
+        
         # List widgets
-        self.product_tree_widget    = ProductTreeWidget()
-        self.parts_list_widget      = PartsListWidget()
+        self.product_tree_widget    = SKUerTreeWidget()
+        self.parts_list_widget      = SKUerListWidget()
 
         self.product_tree_widget.setHeaderHidden(True)
 
@@ -172,4 +137,6 @@ class InventoryWidget(QGroupBox):
         self.inventory_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
         self.inventory_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
 
-        self.parts_list_widget.addPartsItem(PartsListWidgetPartItem())
+        p = PartsListWidgetPartItem()
+        self.parts_list_widget.addItem(p)
+        p.part_widget_sku.setText("RSRY-059-MDL-WOOD")
