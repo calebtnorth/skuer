@@ -5,7 +5,7 @@ from typing import Self
 from PySide6.QtWidgets import (
     QGroupBox, QWidget,
     QGridLayout, QVBoxLayout, QSizePolicy,
-    QLabel, QListWidget
+    QComboBox, QLabel, QListWidget
 )
 from PySide6.QtCore import (
     QRect
@@ -18,7 +18,10 @@ class CurrentEstimateCardWidget(QGroupBox):
     """
 
     def __init__(self: Self, *arg) -> None:
-        super().__init__("Estimates", *arg)
+        super().__init__("",*arg)
+
+        # Selection Widget
+        self.estimate_dropdown_widget           = QComboBox()
 
         # List Widgets
         self.estimated_products_list_widget     = QListWidget()
@@ -50,6 +53,7 @@ class CurrentEstimateCardWidget(QGroupBox):
 
         # Main Layout
         self.estimate_card_widget_layout = QVBoxLayout(self)
+        self.estimate_card_widget_layout.addWidget(self.estimate_dropdown_widget)
         self.estimate_card_widget_layout.addLayout(self.estimate_card_numbers_layout)
         self.estimate_card_widget_layout.addWidget(self.estimated_products_list_widget)
         self.estimate_card_widget_layout.addWidget(self.estimated_expenses_list_widget)
