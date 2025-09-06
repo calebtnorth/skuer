@@ -5,10 +5,11 @@ from typing import Self
 
 from PySide6.QtWidgets import (
     QWidget,
-    QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
+    QListWidget, QListWidgetItem, QTabWidget, QTreeWidget, QTreeWidgetItem
 )
 
 
+## LISTS 
 class SKUerListWidgetItem(QListWidgetItem):
     @abstractmethod
     def widget(self: Self) -> QWidget: ...
@@ -24,6 +25,11 @@ class SKUerListWidget(QListWidget):
         self.setItemWidget(item, item.widget())
 
 
+## TABS
+class SKUerTabWidget(QTabWidget): ...
+
+
+## TREES
 class SKUerTreeWidgetItem(QTreeWidgetItem):
     @abstractmethod
     def widget(self: Self) -> QWidget: ...

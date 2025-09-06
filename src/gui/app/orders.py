@@ -1,4 +1,4 @@
-# Current Inventory widget
+# Current Orders widget
 
 from typing import Self
 

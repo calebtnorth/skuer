@@ -3,7 +3,7 @@
 from typing import Self
 
 from PySide6.QtWidgets import (
-    QWidget, QGroupBox,
+    QGroupBox, QWidget,
     QGridLayout, QVBoxLayout, QSizePolicy,
     QLabel, QListWidget
 )
@@ -18,7 +18,7 @@ class CurrentEstimateCardWidget(QGroupBox):
     """
 
     def __init__(self: Self, *arg) -> None:
-        super().__init__(*arg)
+        super().__init__("Estimates", *arg)
 
         # List Widgets
         self.estimated_products_list_widget     = QListWidget()

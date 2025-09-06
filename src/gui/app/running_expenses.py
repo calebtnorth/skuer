@@ -3,12 +3,12 @@
 from typing import Self
 
 from PySide6.QtWidgets import (
-    QGroupBox,
+    QWidget,
     QGridLayout, QHBoxLayout,
     QPushButton, QListWidget
 )
 
-class RunningExpensesWidget(QGroupBox):
+class RunningExpensesWidget(QWidget):
     """
     Displays the running expenses, regardless of estimate card
     """
