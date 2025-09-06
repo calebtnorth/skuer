@@ -26,7 +26,7 @@ class SKUerListWidget(QListWidget):
 
 class SKUerTreeWidgetItem(QTreeWidgetItem):
     @abstractmethod
-    def widget() -> QWidget: ...
+    def widget(self: Self) -> QWidget: ...
 
     def addChild(self: Self, item: Self):
         if not self.treeWidget():
