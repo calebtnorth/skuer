@@ -5,14 +5,14 @@ from typing import Self
 from PySide6.QtWidgets import (
     QGroupBox, QWidget,
     QGridLayout, QVBoxLayout, QSizePolicy,
-    QComboBox, QLabel, QListWidget
+    QComboBox, QDockWidget, QLabel, QListWidget
 )
 from PySide6.QtCore import (
     QRect
 )
 
 
-class CurrentEstimateCardWidget(QWidget):
+class CurrentEstimateCardDockWidget(QWidget):
     """
     
     """

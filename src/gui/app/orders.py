@@ -5,7 +5,7 @@ from typing import Self
 from PySide6.QtWidgets import (
     QGroupBox, QWidget,
     QGridLayout, QHBoxLayout, QVBoxLayout,
-    QLabel, QPushButton
+    QDockWidget, QLabel, QPushButton
 )
 
 from ..widgets import (
@@ -73,14 +73,18 @@ class ShippedPartsListWidgetShippedPartItem(SKUerListWidgetItem):
         self.setSizeHint(self.shipped_part_widget_layout.sizeHint())
 
 
-class OrdersWidget(QWidget):
+class OrdersDockWidget(QDockWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
 
     def __init__(self: Self, *arg) -> None:
-        super().__init__(*arg)
+        super().__init__("Orders", *arg)
+        self.setWidget(QWidget())
         
+        # Adjust dock features
+        self.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures | QDockWidget.DockWidgetFeature.DockWidgetMovable)
+
         # List widgets
         self.orders_list_widget                 = SKUerListWidget()
         self.shipped_parts_list_widget          = SKUerListWidget()
@@ -96,7 +100,7 @@ class OrdersWidget(QWidget):
         self.orders_list_push_button_layout.addStretch(1)
 
         # Main layout
-        self.stock_widget_layout = QGridLayout(self)
+        self.stock_widget_layout = QGridLayout(self.widget())
         self.stock_widget_layout.addWidget(self.orders_list_widget, 0, 0, 1, 1)
         self.stock_widget_layout.addWidget(self.shipped_parts_list_widget, 0, 1, 1, 1)
         self.stock_widget_layout.addLayout(self.orders_list_push_button_layout, 1, 0, 1, 1)

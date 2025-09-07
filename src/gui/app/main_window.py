@@ -2,7 +2,9 @@
 
 from typing import Self
 
-from PySide6.QtCore import QSize
+from PySide6.QtCore import (
+    QSize, Qt
+)
 from PySide6.QtWidgets import (
     QMainWindow, QGroupBox,
     QGridLayout, QHBoxLayout,
@@ -40,45 +42,18 @@ class SKUMainWindow(QMainWindow):
 
         # Configure window properties
         self.setWindowTitle("SKUer")
-        self.setCentralWidget(SKUMainWidget())
+
+        # Create wdigets and docks and add them to the window
+        self.estimate_widget        = CurrentEstimateCardDockWidget()
+        self.expenses_widget        = RunningExpensesDockWidget()
+        self.orders_widget          = OrdersDockWidget()
+        self.stock_widget           = StockDockWidget()
+
+        self.setCentralWidget(self.estimate_widget)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.expenses_widget)
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.orders_widget)
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.stock_widget)
+        self.tabifyDockWidget(self.orders_widget, self.stock_widget)
 
 
-class SKUMainWidget(QWidget):
-    """
-    Parent widget for SKUer's main interface
-    """
-
-    def __init__(self: Self, *arg) -> None:        
-        super().__init__(*arg)
-
-        # Create all the major widget groups, set, and arrange them together 
-        self.estimate_card_widget:CurrentEstimateCardWidget         = CurrentEstimateCardWidget()
-        self.expenses_widget:RunningExpensesWidget                  = RunningExpensesWidget()
-        self.stock_widget:StockWidget                               = StockWidget()
-        self.orders_widget:OrdersWidget                             = OrdersWidget()
-        self.current_tab_widget:CurrentTabWidget                    = CurrentTabWidget({
-            "Orders": self.orders_widget,
-            "Stock": self.stock_widget,
-        })
-        self.current_estimate_toolbar:CurrentEstimateToolbarWidget  = CurrentEstimateToolbarWidget()
-
-        left_box:MainWindowGroupBox              = MainWindowGroupBox("Current Estimate", self.estimate_card_widget)
-        upper_box:MainWindowGroupBox             = MainWindowGroupBox("Running Expenses", self.expenses_widget)
-        lower_box:MainWindowGroupBox             = MainWindowGroupBox("Current Inventory", self.current_tab_widget)
-        
-        layout:QGridLayout = QGridLayout()
-        self.setLayout(layout)
-
-        layout.addWidget(left_box, 0, 0, 2, 1)
-        layout.addWidget(upper_box, 0, 1, 1, 1)
-        layout.addWidget(lower_box, 1, 1, 1, 1)
-        layout.addWidget(self.current_estimate_toolbar, 2, 0, 1, 2)
-
-        
-        # This ensures that the bottom row stays its size and will not stretch
-        layout.setRowStretch(0, 1)
-        layout.setRowStretch(1, 1)
-        layout.setRowStretch(2, 0)
-
-        # TEMP TODO
         
