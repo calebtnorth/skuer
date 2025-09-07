@@ -13,96 +13,64 @@ from ..widgets import (
     SKUerTreeWidget, SKUerTreeWidgetItem
 )
 
-class ggggg(SKUerTreeWidgetItem):
+class OrdersListWidgetOrderItem(SKUerListWidgetItem):
     """
     The child-level QTreeWidgetItem containing the individual transactions modifying the stock
     """
 
     def widget(self: Self) -> QWidget:
-        return self.transaction_widget
+        return self.order_widget
 
     
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
 
-        self.transaction_widget         = QWidget()
-        self.transaction_widget_layout  = QHBoxLayout(self.transaction_widget)
+        self.order_widget               = QWidget()
+        self.order_widget_layout        = QHBoxLayout(self.order_widget)
 
-        self.transaction_widget_date_label      = QLabel("01/01/1970")
-        self.transaction_widget_type_label      = QLabel("Restock")
-        self.transaction_widget_sold_label      = QLabel("0")
-        self.transaction_widget_in_stock_label  = QLabel("0")
-        self.transaction_widget_total_label     = QLabel("0")
+        self.order_widget_number_label              = QLabel("Order # NK000000")
+        self.order_widget_date_label                = QLabel("01/01/1970")
+        self.order_widget_expense_label             = QLabel("$0.00")
+        self.order_widget_income_label              = QLabel("$0.00")
 
-        self.transaction_widget_layout.addWidget(self.transaction_widget_date_label)
-        self.transaction_widget_layout.addStretch(1)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_type_label)
-        self.transaction_widget_layout.addStretch(1)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_sold_label)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_in_stock_label)
-        self.transaction_widget_layout.addWidget(self.transaction_widget_total_label)
+        vertical_layout = QVBoxLayout()
+        vertical_layout.addWidget(self.order_widget_expense_label)
+        vertical_layout.addWidget(self.order_widget_income_label)
 
-        self.setSizeHint(0, self.transaction_widget.sizeHint())
+        self.order_widget_layout.addWidget(self.order_widget_number_label)
+        self.order_widget_layout.addStretch(1)
+        self.order_widget_layout.addWidget(self.order_widget_date_label)
+        self.order_widget_layout.addStretch(1)
+        self.order_widget_layout.addLayout(vertical_layout)
 
-
-class ProductTrgggeeWidgetStockItem(SKUerTreeWidgetItem):
-    """
-    The top-level QTreeWidgetItem containing the primary details of the product
-    """
-
-    def widget(self: Self) -> None:
-        return self.stock_widget
+        self.setSizeHint(self.order_widget.sizeHint())
 
 
-    def __init__(self: Self, *arg) -> None:
-        super().__init__(*arg)
-
-        self.stock_widget           = QWidget()
-        self.stock_widget_layout    = QHBoxLayout(self.stock_widget)
-        
-        self.stock_widget_sku_label         = QLabel("SKU")
-        self.stock_widget_sold_label        = QLabel("0")
-        self.stock_widget_in_stock_label    = QLabel("0")
-        self.stock_widget_total_label       = QLabel("0")
-
-        self.stock_widget_layout.addWidget(self.stock_widget_sku_label)
-        self.stock_widget_layout.addStretch(1)
-        self.stock_widget_layout.addWidget(self.stock_widget_sold_label)
-        self.stock_widget_layout.addWidget(self.stock_widget_in_stock_label)
-        self.stock_widget_layout.addWidget(self.stock_widget_total_label)
-
-        self.setSizeHint(0, self.stock_widget.sizeHint())
-
-
-class PartsListWidgetPartgggggItem(SKUerListWidgetItem):
+class ShippedPartsListWidgetShippedPartItem(SKUerListWidgetItem):
     """
     The QListWidgetItem constaining a single part used in the product
     """
 
     def widget(self: Self) -> QWidget:
-        return self.part_widget
+        return self.shipped_part_widget
 
     def __init__(self: Self, *arg) -> None:
         super().__init__(*arg)
 
-        self.part_widget            = QWidget()
-        self.part_widget_layout     = QHBoxLayout(self.part_widget)
+        self.shipped_part_widget            = QWidget()
+        self.shipped_part_widget_layout     = QHBoxLayout(self.shipped_part_widget)
 
-        self.part_widget_name       = QLabel("Name")
-        self.part_widget_sku        = QLabel("SKU")
-        self.part_widget_used       = QLabel("0")
-        self.part_widget_in_stock   = QLabel("0")
+        self.shipped_part_widget_sku_label        = QLabel("SKU")
+        self.shipped_part_widget_used_label       = QLabel("0")
+        self.shipped_part_widget_value_label      = QLabel("$0")
 
-        vertical_layout = QVBoxLayout()
-        vertical_layout.addWidget(self.part_widget_name)
-        vertical_layout.addWidget(self.part_widget_sku)
+        self.shipped_part_widget_layout.addWidget(self.shipped_part_widget_sku_label)
+        self.shipped_part_widget_layout.addStretch(1)
+        self.shipped_part_widget_layout.addWidget(self.shipped_part_widget_used_label)
+        self.shipped_part_widget_layout.addStretch(1)
+        self.shipped_part_widget_layout.addWidget(self.shipped_part_widget_value_label)
 
-        self.part_widget_layout.addLayout(vertical_layout)
-        self.part_widget_layout.addStretch(1)
-        self.part_widget_layout.addWidget(self.part_widget_used)
-        self.part_widget_layout.addWidget(self.part_widget_in_stock)
-
-        self.setSizeHint(self.part_widget.sizeHint())
+        self.setSizeHint(self.shipped_part_widget_layout.sizeHint())
 
 
 class OrdersWidget(QWidget):
@@ -114,25 +82,27 @@ class OrdersWidget(QWidget):
         super().__init__(*arg)
         
         # List widgets
-        self.product_tree_widget    = SKUerTreeWidget()
-        self.parts_list_widget      = SKUerListWidget()
-
-        self.product_tree_widget.setHeaderHidden(True)
+        self.orders_list_widget                 = SKUerListWidget()
+        self.shipped_parts_list_widget          = SKUerListWidget()
 
         # Buttons
-        self.product_tree_push_button_layout    = QHBoxLayout()
+        self.orders_list_push_button_layout     = QHBoxLayout()
 
-        self.product_tree_add_push_button       = QPushButton("Add")
-        self.product_tree_delete_push_button    = QPushButton("Delete")
-        self.product_tree_estimate_push_button  = QPushButton("Estimate")
+        self.orders_list_add_push_button        = QPushButton("Add")
+        self.orders_list_delete_push_button     = QPushButton("Delete")
 
-        self.product_tree_push_button_layout.addWidget(self.product_tree_add_push_button)
-        self.product_tree_push_button_layout.addWidget(self.product_tree_delete_push_button)
-        self.product_tree_push_button_layout.addStretch(1)
-        self.product_tree_push_button_layout.addWidget(self.product_tree_estimate_push_button)
+        self.orders_list_push_button_layout.addWidget(self.orders_list_add_push_button)
+        self.orders_list_push_button_layout.addWidget(self.orders_list_delete_push_button)
+        self.orders_list_push_button_layout.addStretch(1)
 
         # Main layout
         self.stock_widget_layout = QGridLayout(self)
-        self.stock_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
-        self.stock_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
-        self.stock_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
+        self.stock_widget_layout.addWidget(self.orders_list_widget, 0, 0, 1, 1)
+        self.stock_widget_layout.addWidget(self.shipped_parts_list_widget, 0, 1, 1, 1)
+        self.stock_widget_layout.addLayout(self.orders_list_push_button_layout, 1, 0, 1, 1)
+
+        o = OrdersListWidgetOrderItem()
+        self.orders_list_widget.addItem(o)
+
+        s = ShippedPartsListWidgetShippedPartItem()
+        self.shipped_parts_list_widget.addItem(s)
