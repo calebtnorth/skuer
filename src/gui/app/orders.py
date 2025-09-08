@@ -9,8 +9,8 @@ from PySide6.QtWidgets import (
 )
 
 from ..widgets import (
+    SKUerDockWidget,
     SKUerListWidget, SKUerListWidgetItem,
-    SKUerTreeWidget, SKUerTreeWidgetItem
 )
 
 class OrdersListWidgetOrderItem(SKUerListWidgetItem):
@@ -73,17 +73,13 @@ class ShippedPartsListWidgetShippedPartItem(SKUerListWidgetItem):
         self.setSizeHint(self.shipped_part_widget_layout.sizeHint())
 
 
-class OrdersDockWidget(QDockWidget):
+class OrdersDockWidget(SKUerDockWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
 
     def __init__(self: Self, *arg) -> None:
         super().__init__("Orders", *arg)
-        self.setWidget(QWidget())
-        
-        # Adjust dock features
-        self.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures | QDockWidget.DockWidgetFeature.DockWidgetMovable)
 
         # List widgets
         self.orders_list_widget                 = SKUerListWidget()
@@ -104,9 +100,3 @@ class OrdersDockWidget(QDockWidget):
         self.stock_widget_layout.addWidget(self.orders_list_widget, 0, 0, 1, 1)
         self.stock_widget_layout.addWidget(self.shipped_parts_list_widget, 0, 1, 1, 1)
         self.stock_widget_layout.addLayout(self.orders_list_push_button_layout, 1, 0, 1, 1)
-
-        o = OrdersListWidgetOrderItem()
-        self.orders_list_widget.addItem(o)
-
-        s = ShippedPartsListWidgetShippedPartItem()
-        self.shipped_parts_list_widget.addItem(s)

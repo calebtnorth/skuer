@@ -3,10 +3,33 @@
 from abc import abstractmethod
 from typing import Self
 
+from PySide6.QtCore import (
+    Qt
+)
 from PySide6.QtWidgets import (
     QWidget,
-    QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
+    QDockWidget, QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
 )
+
+
+## DOCKS
+class SKUerDockWidget(QDockWidget):
+    """
+    Automatically assigns a widget to itself and sets some basic features
+    """
+
+    def __init__(self: Self, *arg) -> None:
+        super().__init__(*arg)
+
+        self.setWidget(QWidget())
+        self.setFeatures(
+            QDockWidget.DockWidgetFeature.NoDockWidgetFeatures | \
+            QDockWidget.DockWidgetFeature.DockWidgetMovable
+        )
+        self.setAllowedAreas(
+            Qt.DockWidgetArea.AllDockWidgetAreas & \
+            ~Qt.DockWidgetArea.TopDockWidgetArea
+        )
 
 
 ## LISTS 

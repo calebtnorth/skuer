@@ -8,17 +8,17 @@ from PySide6.QtWidgets import (
     QDockWidget, QPushButton, QListWidget
 )
 
-class RunningExpensesDockWidget(QDockWidget):
+from ..widgets import (
+    SKUerDockWidget
+)
+
+class RunningExpensesDockWidget(SKUerDockWidget):
     """
     Displays the running expenses, regardless of estimate card
     """
 
     def __init__(self: Self, *arg) -> None:
         super().__init__("Running Expenses", *arg)
-        self.setWidget(QWidget())
-
-        # Adjust dock features
-        self.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures | QDockWidget.DockWidgetFeature.DockWidgetMovable)
 
         # List widgets
         self.transactions_list_widget   = QListWidget()

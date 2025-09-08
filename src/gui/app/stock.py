@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
 )
 
 from ..widgets import (
+    SKUerDockWidget,
     SKUerListWidget, SKUerListWidgetItem,
     SKUerTreeWidget, SKUerTreeWidgetItem
 )
@@ -105,17 +106,13 @@ class PartsListWidgetPartItem(SKUerListWidgetItem):
         self.setSizeHint(self.part_widget.sizeHint())
 
 
-class StockDockWidget(QDockWidget):
+class StockDockWidget(SKUerDockWidget):
     """
     Displays the current inventory, regardless of estimate card
     """       
 
     def __init__(self: Self, *arg) -> None:
         super().__init__("Stock", *arg)
-        self.setWidget(QWidget())
-        
-        # Adjust dock features
-        self.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures | QDockWidget.DockWidgetFeature.DockWidgetMovable)
 
         # List widgets
         self.product_tree_widget    = SKUerTreeWidget()
@@ -140,7 +137,3 @@ class StockDockWidget(QDockWidget):
         self.stock_widget_layout.addWidget(self.product_tree_widget, 0, 0, 1, 1)
         self.stock_widget_layout.addWidget(self.parts_list_widget, 0, 1, 1, 1)
         self.stock_widget_layout.addLayout(self.product_tree_push_button_layout, 1, 0, 1, 1)
-
-        p = PartsListWidgetPartItem()
-        self.parts_list_widget.addItem(p)
-        p.part_widget_sku.setText("RSRY-059-MDL-WOOD")

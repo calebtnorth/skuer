@@ -3,32 +3,18 @@
 from typing import Self
 
 from PySide6.QtCore import (
-    QSize, Qt
+    Qt
 )
 from PySide6.QtWidgets import (
-    QMainWindow, QGroupBox,
-    QGridLayout, QHBoxLayout,
-    QWidget
+    QMainWindow, QTabWidget
 )
 
 from ..widgets import *
 
 from .estimate import *
-from .current import * 
+from .stock import *
+from .orders import * 
 from .expenses import *
-
-
-## GROUPBOX
-class MainWindowGroupBox(QGroupBox):
-    """
-    Create a QGroupBox and add only a single widget
-    """
-
-    def __init__(self:Self, title:str, widget:QWidget, *args) -> None:
-        super().__init__(title, *args)
-
-        layout = QHBoxLayout(self)
-        layout.addWidget(widget)
 
 
 ## MAIN WINDOW
@@ -42,6 +28,7 @@ class SKUMainWindow(QMainWindow):
 
         # Configure window properties
         self.setWindowTitle("SKUer")
+        self.setTabPosition(Qt.DockWidgetArea.AllDockWidgetAreas, QTabWidget.TabPosition.North)
 
         # Create wdigets and docks and add them to the window
         self.estimate_widget        = CurrentEstimateCardDockWidget()
